@@ -42,7 +42,7 @@ object MovLens{
      
     //println("Mean Squared Error = " + MSE)
     
-    val up2 = sc.parallelize(List((1,1193),(0,1193),(1,1000000)))
+    val up2 = sc.parallelize(List((1,1193),(0,1193),(1,1000000),(1,914)))
     //println(ratings.count())
     val pred2 = model.predict(up2).collect
     for(r <- pred2){

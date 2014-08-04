@@ -129,6 +129,18 @@ object AMP {
 	val bestALSModel = train(training,10,20,0.1)
 	val testRmse = computeRmse(bestALSModel, test, numTest)
 	println("RMSE on the test set is " + testRmse)
+	
+	val myRatedMovieIds = myRatings.map(_.product).toSet
+	val candidates = sc.parallelize(movies.keys.filter(!myRatedMovieIds.contains(_)).toSeq)
+	val recommendations =  bestALSModel.predict(candidates.map((0, _)))
+                                   .collect
+                                   .sortBy(-_.rating)
+                                   .take(50)
+    var i = 1
+    println("Movies recommended for you:")
+    recommendations.foreach { 
+	  r =>  println("%2d".format(i) + ": " + movies(r.product))
+      i += 1    }                          
     sc.stop()
     
     }
